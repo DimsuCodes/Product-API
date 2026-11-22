@@ -72,11 +72,25 @@ router.delete('/:id', async (req, res) => {
 router.get('/', async (req, res) => {
     const page = Number(req.query.page) || 1;
     const limit = Number(req.query.limit) || 10;
+    const filter = {};
+    if (req.query.category) {
+       filter.category = req.query.category;
+    } 
+    if(req.query.minPrice || req.query.maxPrice){
+        filter.price ={};
+    }
+    if(req.query.minPrice){
+        filter.price.$gte = Number (req.query.minPrice)
+    }
+    if (req.query.maxPrice) {
+    filter.price.$lte = Number(req.query.maxPrice);
+}
     try {
-        const results = await Product.find({})
+        const results = await Product.find(filter)
              .skip((page - 1) * limit)
             // And finally, limit the amount of documents that we return.
             .limit(limit);
+
         res.json(results);
     } catch (err) {
        res.status(500).json({ message: err.message })
