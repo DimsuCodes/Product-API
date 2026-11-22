@@ -35,7 +35,7 @@ router.get('/:id', async (req, res) => {
 
 router.put('/:id', async (req, res) => {
     try {
-        
+
         const product = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
         // 2. if there's no product, return a 404 with a message
         if (!product) {
@@ -53,7 +53,7 @@ router.put('/:id', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
     try {
-        
+
         const product = await Product.findByIdAndDelete(req.params.id);
         // 2. if there's no product, return a 404 with a message
         if (!product) {
@@ -69,5 +69,18 @@ router.delete('/:id', async (req, res) => {
     }
 })
 
+router.get('/', async (req, res) => {
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
+    try {
+        const results = await Product.find({})
+             .skip((page - 1) * limit)
+            // And finally, limit the amount of documents that we return.
+            .limit(limit);
+        res.json(results);
+    } catch (err) {
+       res.status(500).json({ message: err.message })
+    }
+    })
 
 export default router;
