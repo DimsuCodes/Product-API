@@ -100,13 +100,4 @@ GET /api/products?category=electronics&minPrice=10&sortBy=price_asc&page=1&limit
 
 ## What I Struggled With
 
-- **Schemas vs. functions.** I first wrote the schema as `export function productSchema(){ ... }`. A schema is made with `new Schema({ ... })`, and only the model gets exported.
-- **Importing and calling things.** In `server.js` I made a second box with the same name (`const connection = connection()`), which crashed the server. I just needed to call it: `connection()`. I also learned `Router` comes from `'express'`, and a default export is imported without `{ }`.
-- **axios vs. Mongoose.** In my POST route I reached for `axios` like in my Movie Finder project. Here I'm talking to my own database, so the `Product` model does the work: `Product.create(req.body)`. There's no `.data` either.
-- **Keeping routes separate.** At one point I put my GET route inside my POST route. Each route is its own block, and they all go above `export default router`.
-- **Using the right error message.** I learned `e.message` gives a clear reason (like which field is missing) instead of a generic "Something went wrong."
-- **Reading the URL.** `req.query` holds everything after the `?`. I tried to type the URL itself into my code before I understood the code just reads what the user sends.
-- **Building the filter.** I wrapped my filter in extra braces (`find({filter})`) and left `filter.category = {}` empty, so nothing matched. The filter is already an object, so it's `find(filter)`, filled with values from `req.query`.
-- **Sort order.** `1` means small to big and `-1` means big to small. Sorting has to happen before `.skip()` and `.limit()` so the pages come out in the right order.
-- **Testing with enough data.** With only one product, my filters and sorting looked broken. Adding more products showed they actually worked.
-- **Git.** My commit didn't go through at first because I ran it without a message. `git commit -m "..."` fixed it.
+honestly this one was a lot but i got through it. at first i wrote my schema like a function when it was supposed to be new Schema, and in my server i named my connection twice so it kept crashing. i also kept wanting to use axios like my movie finder project but this time im talking to my own database so the Product model does all the work. i accidentally put my get route inside my post route too and had to learn that every route is its own block and they all go above export default router. the hardest part was the get all route, i was confused about the url and req.query and i put my filter in extra curly braces so nothing showed up. i also learned 1 is small to big and -1 is big to small for sorting, and that sort has to go before skip and limit. i thought my filters were broken but i only had one product in my database lol, once i added more everything worked. also my git wasnt committing because i forgot the -m message.
