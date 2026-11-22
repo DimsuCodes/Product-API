@@ -51,5 +51,23 @@ router.put('/:id', async (req, res) => {
     }
 })
 
+router.delete('/:id', async (req, res) => {
+    try {
+        
+        const product = await Product.findByIdAndDelete(req.params.id);
+        // 2. if there's no product, return a 404 with a message
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found' })
+        }
+
+        // 3. send delete message
+        res.json({ message: 'Product deleted' })
+
+    } catch (e) {
+        // 4. send a 500 with e.message
+        res.status(500).json({ message: e.message })
+    }
+})
+
 
 export default router;
