@@ -74,27 +74,39 @@ router.get('/', async (req, res) => {
     const limit = Number(req.query.limit) || 10;
     const filter = {};
     if (req.query.category) {
-       filter.category = req.query.category;
-    } 
-    if(req.query.minPrice || req.query.maxPrice){
-        filter.price ={};
+        filter.category = req.query.category;
     }
-    if(req.query.minPrice){
-        filter.price.$gte = Number (req.query.minPrice)
+    if (req.query.minPrice || req.query.maxPrice) {
+        filter.price = {};
+    }
+    if (req.query.minPrice) {
+        filter.price.$gte = Number(req.query.minPrice)
     }
     if (req.query.maxPrice) {
-    filter.price.$lte = Number(req.query.maxPrice);
-}
+        filter.price.$lte = Number(req.query.maxPrice);
+    }
+
+    // sorting: price_asc = cheapest first, price_desc = most expensive first
+    const sort = {};
+    if (req.query.sortBy === 'price_asc') {
+         sort.price = 1
+
+    } else if (req.query.sortBy === 'price_desc') {
+        sort.price = -1
+
+    }
+
     try {
         const results = await Product.find(filter)
-             .skip((page - 1) * limit)
+            .sort(sort)
+            .skip((page - 1) * limit)
             // And finally, limit the amount of documents that we return.
             .limit(limit);
 
         res.json(results);
     } catch (err) {
-       res.status(500).json({ message: err.message })
+        res.status(500).json({ message: err.message })
     }
-    })
+})
 
 export default router;
