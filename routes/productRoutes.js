@@ -20,17 +20,36 @@ router.get('/:id', async (req, res) => {
         // 1. find the product by its id (req.params.id), save it in a box called product
         const product = await Product.findById(req.params.id);
         // 2. if there's no product, return a 404 with a message
-            if(!product){
-                return res.status(404).json({message: 'Product not found'})
-            }
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found' })
+        }
 
         // 3. send the product back
-            res.json(product)
+        res.json(product)
 
     } catch (e) {
         // 4. send a 500 with e.message
         res.status(500).json({ message: e.message })
     }
 })
+
+router.put('/:id', async (req, res) => {
+    try {
+        
+        const product = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        // 2. if there's no product, return a 404 with a message
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found' })
+        }
+
+        // 3. send the product back
+        res.json(product)
+
+    } catch (e) {
+        // 4. send a 500 with e.message
+        res.status(500).json({ message: e.message })
+    }
+})
+
 
 export default router;
